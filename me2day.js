@@ -29,6 +29,12 @@ var me2day = {
     optimizedPrototypeVersion: '1.6.0.3',
 
     /*
+        Variable: me
+            로그인한 사용자
+    */
+    me: null,
+
+    /*
         Function: notify
             미투데이 알림창에 메시지를 띄웁니다.
 
@@ -122,10 +128,6 @@ me2day.User = Class.create({
     }
 });
 
-/*
-    Variable: <me2day::me>
-        로그인한 사용자
-*/
 me2day.me = new me2day.User(etc.mid);
 
 })(Prototype);
