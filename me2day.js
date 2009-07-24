@@ -49,16 +49,16 @@ var me2day = {
 
         Parameters:
             url - 요청 주소
-            parameters - QueryString
+            options - Prototype의 Ajax Options(method는 GET으로 고정)
     */
-    request: function(url, parameters) {
-        if (typeof parameters.toQueryString == 'function') {
-            parameters = parameters.toQueryString();
+    request: function(url, options) {
+        options.parameters = options.parameters || '';
+        if (typeof options.parameters.toQueryString == 'function') {
+            options.parameters = options.parameters.toQueryString();
         }
-        return new Ajax.Request('http://me2day.net/get_html', {
-            url: url + '?' + parameters,
-            method: 'get'
-        });
+        options.parameters = {url: url + '?' + options.parameters};
+        options.method = 'get';
+        return new Ajax.Request('http://me2day.net/get_html', options);
     }
 };
 window.me2day = me2day;
