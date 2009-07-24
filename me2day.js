@@ -2,7 +2,7 @@
     Script: me2day.js
 
     Version:
-        0.1.0
+        0.1.0pre
 
     License:
         MIT-style license.
@@ -10,7 +10,7 @@
     Author:
         Lee, Heungsub <lee@heungsub.net>
 */
-(function(P) {
+if (true || typeof window.me2day == 'undefined') {
 
 /*
     Namespace: me2day
@@ -20,7 +20,7 @@ var me2day = {
         Variable: version
             me2day.js 버전
     */
-    version: '0.1.0',
+    version: '0.1.0pre',
 
     /*
         Variable: optimizedPrototypeVersion
@@ -106,7 +106,7 @@ me2day.User = Class.create({
             events = {onSuccess: events};
         }
         events = Object.extend({
-            onSuccess: P.emptyFunction,
+            onSuccess: Prototype.emptyFunction,
             onFailure: function() {
                 throw new Error('사용자키를 가져오지 못했습니다.');
             }
@@ -114,7 +114,7 @@ me2day.User = Class.create({
         new Ajax.Request('/' + this.name + '/setting/basic', {
             method:'get',
             onFailure: events.onFailure,
-            onSuccess: function(transport) {
+            onSuccess: (function(transport) {
                 try {
                     var pattern = /id="user_key">\s*([^\s]+)/;
                     var response = transport.responseText;
@@ -123,12 +123,26 @@ me2day.User = Class.create({
                     return failure();
                 }
                 return events.onSuccess(this.key);
-            }
+            }).bind(this)
         });
+    },
+
+    /*
+        Function: showProfile
+            프로필 상자를 엽니다.
+    */
+    showProfile: function(element, page) {
+        page = page || 'basic';
+        var pages = 'band basic blog friend memo name_card sms token';
+        if ($w(pages).indexOf(page) == -1)
+            throw new Error('page에는 다음 값만 올 수 있습니다: ' + pages);
+        Profile['show_' + page](element, this.name);
     }
 });
 
 me2day.me = new me2day.User(etc.mid);
 
-})(Prototype);
+} else {
+    var me2day = window.me2day;
+}
 
